@@ -1,0 +1,85 @@
+apply plugin: 'java'
+apply plugin: 'war'
+
+repositories {
+    mavenCentral()
+}
+
+task info << {
+	task -> println "project.version=$project.version; project.group=$project.group; project.name=$project.name"
+}
+
+def moduleName = 'com.nestlabs.demo.Application'
+
+task compileGwt (dependsOn: 'classes', type: JavaExec) {
+    inputs.source sourceSets.main.java.srcDirs
+    inputs.dir sourceSets.main.output
+    ext.targetDir = "${project.buildDir}/gwtc"
+    outputs.dir "$targetDir"
+
+    outputs.upToDateSpec = new AndSpec()
+
+    doFirst {
+        file(targetDir).mkdirs()
+    }
+
+    main = 'com.google.gwt.dev.Compiler'
+
+    classpath {[
+            sourceSets.main.java.srcDirs,
+            sourceSets.main.output,
+            sourceSets.main.compileClasspath,
+    ]}
+
+    args = [
+            "$moduleName",
+            '-war', targetDir,
+            '-logLevel', 'INFO'
+    ]
+}
+
+war {
+	it.dependsOn 'compileGwt'
+	from compileGwt.targetDir
+
+	manifest {
+		attributes (
+				"Specification-Title": project.name,
+				"Implementation-Version": project.version
+		)
+	}
+}
+
+dependencies {
+	def httpComponentsVersion = '4.1.1'
+	def gwtVersion = '2.7.0'
+	def ginVersion = '2.1.2'
+	def gwtpVersion = '1.5.1'
+	def jacksonVersion = '2.6.4'
+	def slf4jVersion = '1.7.12'
+	def log4jVersion = '1.2.17'
+
+	compile "org.apache.httpcomponents:httpasyncclient:$httpComponentsVersion"
+
+	compile "com.google.gwt:gwt-servlet:$gwtVersion"
+	providedCompile ("com.google.gwt:gwt-user:$gwtVersion") {
+        	transitive = false;
+	}
+	providedCompile ("com.google.gwt:gwt-dev:$gwtVersion")  {
+		transitive = false;
+	}
+
+	compile ("com.google.gwt.inject:gin:$ginVersion") {
+		exclude module: 'asm'
+	}
+
+	compile "com.gwtplatform:gwtp-mvp-client:$gwtpVersion"
+
+	compile "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
+	compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+
+	compile "org.slf4j:slf4j-api:$slf4jVersion"
+	runtime "org.slf4j:slf4j-log4j12:$slf4jVersion"
+	runtime "log4j:log4j:$log4jVersion"
+}
+

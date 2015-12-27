@@ -1,0 +1,42 @@
+.menu {
+    background-color: #464646;
+    height: 30px;
+}
+
+.menu a {
+    color: white;
+    text-decoration: none;
+    padding: 5px 20px;
+    display: inline-block;
+}
+
+.menu a:hover {
+    color: lightgray;
+    background-color: #343434;
+}
+
+.page-header {
+    padding: 20px 20px 20px 50px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.device-panel {
+    padding: 20px;
+    float: left;
+}
+
+.device-panel-column {
+    float: left;
+}
+
+.device-image {
+    height: 150px;
+    width: auto;
+}
+
+.device-props td {
+    padding: 3px 15px;
+}
+
+

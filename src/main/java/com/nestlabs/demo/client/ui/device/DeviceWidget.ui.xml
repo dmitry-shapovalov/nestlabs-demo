@@ -1,0 +1,14 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+    <g:HTMLPanel addStyleNames="device-panel">
+        <div class="device-panel-column">
+            <g:Image ui:field="image" addStyleNames="device-image" />
+        </div>
+        <div class="device-panel-column">
+            <g:FlexTable ui:field="propertyTable" addStyleNames="device-props" />
+        </div>
+    </g:HTMLPanel>
+
+</ui:UiBinder>
